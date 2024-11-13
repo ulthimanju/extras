@@ -1,0 +1,575 @@
+---------------quicksort---------------------------------
+import java.util.Scanner;
+
+public class QuickSort {
+
+    public static void quickSort(int[] array, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(array, low, high);
+            quickSort(array, low, pivotIndex - 1);
+            quickSort(array, pivotIndex + 1, high);
+        }
+    }
+
+    private static int partition(int[] array, int low, int high) {
+        int pivot = array[low];
+        int left = low + 1;
+        int right = high;
+
+        while (left <= right) {
+            while (left <= right && array[left] <= pivot) left++;
+            while (left <= right && array[right] > pivot) right--;
+            if (left < right) swap(array, left, right);
+        }
+
+        swap(array, low, right);
+        return right;
+    }
+
+    private static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void printArray(int[] array) {
+        for (int i : array) System.out.print(i + " ");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of elements: ");
+        int n = scanner.nextInt();
+        int[] array = new int[n];
+        System.out.println("Enter the elements:");
+        for (int i = 0; i < n; i++) array[i] = scanner.nextInt();
+
+        System.out.println("Original array:");
+        printArray(array);
+
+        quickSort(array, 0, array.length - 1);
+
+        System.out.println("Sorted array:");
+        printArray(array);
+
+        scanner.close();
+    }
+}
+------------------------mergesort----------------------
+import java.util.Scanner;
+
+public class MergeSort {
+
+    // Merge two halves
+    private static void merge(int[] arr, int left, int middle, int right) {
+        int n1 = middle - left + 1;
+        int n2 = right - middle;
+
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        for (int i = 0; i < n1; i++) L[i] = arr[left + i];
+        for (int j = 0; j < n2; j++) R[j] = arr[middle + 1 + j];
+
+        int i = 0, j = 0, k = left;
+
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+
+    // Sort the array
+    private static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int middle = left + (right - left) / 2;
+
+            mergeSort(arr, left, middle);
+            mergeSort(arr, middle + 1, right);
+
+            merge(arr, left, middle, right);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of elements: ");
+        int n = scanner.nextInt();
+
+        int[] arr = new int[n];
+        System.out.println("Enter the elements:");
+        for (int i = 0; i < n; i++) arr[i] = scanner.nextInt();
+
+        mergeSort(arr, 0, arr.length - 1);
+
+        System.out.println("Sorted array:");
+        for (int i : arr) System.out.print(i + " ");
+        System.out.println();
+
+        scanner.close();
+    }
+}
+--------------------------LinearSearch----------------------------------
+import java.util.*;
+
+public class LinearSearch{
+    public static void LinearSearch(int[] array,int key){
+        for(int i=0;i<array.length-1;i++){
+            if(array[i]==key){
+                System.out.println("Element Found at index:"+i);
+            }
+        }
+    }
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter size of array:");
+        int n = sc.nextInt();
+        int[] array = new int[n];
+        System.out.println("Enter Elements of array:");
+        for(int i=0;i<n;i++){
+            array[i]=sc.nextInt();
+        }
+        System.out.println("Enter key to search:");
+        int key = sc.nextInt();
+        LinearSearch(array,key);
+        sc.close();
+    }
+}
+-------------------------------BinarySearch----------------------------
+import java.util.Scanner;
+
+public class BinarySearch {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the number of elements in the array:");
+        int n = scanner.nextInt();
+
+        int[] array = new int[n];
+
+        System.out.println("Enter the elements of the array in ascending order:");
+        for (int i = 0; i < n; i++) {
+            array[i] = scanner.nextInt();
+        }
+
+        System.out.println("Enter the number to be searched:");
+        int key = scanner.nextInt();
+
+        int index = binarySearch(array, key);
+
+        if (index != -1) {
+            System.out.println("Number found at index " + index + " in the array.");
+        } else {
+            System.out.println("Number not found in the array.");
+        }
+
+        scanner.close();
+    }
+
+    private static int binarySearch(int[] array, int key) {
+        int start = 0;
+        int end = array.length - 1;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+
+            if (array[mid] == key) {
+                return mid;
+            }
+
+            if (array[mid] < key) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+}
+------------------------------Matrix Chain Order Multiplication-------------
+import java.util.Scanner;
+
+public class mcm {
+
+    // Function to print the optimal parenthesization
+    static void printOptimalParenthesis(int[][] s, int i, int j) {
+        if (i == j) {
+            System.out.print("A" + (i + 1));
+        } else {
+            System.out.print("(");
+            printOptimalParenthesis(s, i, s[i][j]);
+            printOptimalParenthesis(s, s[i][j] + 1, j);
+            System.out.print(")");
+        }
+    }
+
+    // Function to compute the cost and parenthesization
+    static void matrixChainOrder(int[] p, int n) {
+        int[][] m = new int[n][n];
+        int[][] s = new int[n][n];
+
+        // Initialize the cost of multiplying one matrix to 0
+        for (int i = 0; i < n; i++) {
+            m[i][i] = 0;
+        }
+
+        // Compute the cost and parenthesization
+        for (int l = 2; l < n; l++) {
+            for (int i = 0; i < n - l; i++) {
+                int j = i + l - 1;
+                m[i][j] = Integer.MAX_VALUE;
+                for (int k = i; k < j; k++) {
+                    int q = m[i][k] + m[k + 1][j] + p[i] * p[k + 1] * p[j + 1];
+                    if (q < m[i][j]) {
+                        m[i][j] = q;
+                        s[i][j] = k;
+                    }
+                }
+            }
+        }
+
+        System.out.println("Minimum number of multiplications is " + m[0][n - 2]);
+        System.out.print("Optimal Parenthesization is: ");
+        printOptimalParenthesis(s, 0, n - 2);
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of matrices: ");
+        int n = sc.nextInt();
+
+        int[] dimensions = new int[n + 1];
+        System.out.println("Enter the dimensions of the matrices: ");
+        for (int i = 0; i <= n; i++) {
+            dimensions[i] = sc.nextInt();
+        }
+
+        matrixChainOrder(dimensions, n + 1);
+
+        sc.close();
+    }
+}
+------------------------------Floyd Warshall Algorithm-------------------
+import java.util.Scanner;
+
+public class FloydWarshall {
+
+    final static int INF = 99999; // Define a large value as "infinity"
+
+    // Function to implement Floyd-Warshall algorithm
+    static void floydWarshall(int[][] graph, int V) {
+        int[][] dist = new int[V][V]; // dist[i][j] will hold the shortest distance from i to j
+
+        // Initialize the solution matrix as the input graph matrix
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                dist[i][j] = graph[i][j];
+            }
+        }
+
+        // Update dist[][] using Floyd-Warshall algorithm
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+
+        // Print the shortest distance matrix
+        printSolution(dist, V);
+    }
+
+    // Function to print the distance matrix
+    static void printSolution(int[][] dist, int V) {
+        System.out.println("Shortest distances between every pair of vertices:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][j] == INF) {
+                    System.out.print("INF ");
+                } else {
+                    System.out.print(dist[i][j] + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input the number of vertices
+        System.out.print("Enter the number of vertices: ");
+        int V = sc.nextInt();
+
+        // Input the graph matrix
+        int[][] graph = new int[V][V];
+        System.out.println("Enter the adjacency matrix (enter " + INF + " for no direct edge): ");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                graph[i][j] = sc.nextInt();
+            }
+        }
+
+        // Execute the Floyd-Warshall algorithm
+        floydWarshall(graph, V);
+
+        sc.close();
+    }
+}
+-----------------------------------Optimal Binary Search tree----------------
+import java.util.Scanner;
+
+public class OBS {
+    static int[][] root;
+
+    static int optcost(int freq[], int i, int j) {
+        if (j < i) {
+            return 0;
+        }
+        if (j == i) {
+            root[i][j] = i;
+            return freq[i];
+        }
+        int freqsum = sum(freq, i, j);
+        int min = Integer.MAX_VALUE;
+        int minRoot = -1;
+
+        for (int r = i; r <= j; ++r) {
+            int cost = optcost(freq, i, r - 1) + optcost(freq, r + 1, j);
+            if (cost < min) {
+                min = cost;
+                minRoot = r;
+            }
+        }
+
+        root[i][j] = minRoot;
+        return min + freqsum;
+    }
+
+    static int optimalSearchTree(int keys[], int freq[], int n) {
+        root = new int[n][n];
+        return optcost(freq, 0, n - 1);
+    }
+
+    static int sum(int freq[], int i, int j) {
+        int sum = 0;
+        for (int k = i; k <= j; k++) {
+            sum += freq[k];
+        }
+        return sum;
+    }
+
+    static void printTree(int keys[], int i, int j, String indent, boolean isLeft) {
+        if (i > j) return;
+        
+        int r = root[i][j];
+        
+        if (indent.length() > 0) {
+            System.out.println(indent.substring(0, indent.length() - 4) + (isLeft ? "├── " : "└── ") + keys[r]);
+        } else {
+            System.out.println(keys[r]);
+        }
+        
+        printTree(keys, i, r - 1, indent + (isLeft ? "│   " : "    "), true);
+        printTree(keys, r + 1, j, indent + (isLeft ? "│   " : "    "), false);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter number of keys: ");
+        int n = scanner.nextInt();
+
+        int[] keys = new int[n];
+        int[] freq = new int[n];
+
+        System.out.println("Enter keys:");
+        for (int i = 0; i < n; i++) {
+            keys[i] = scanner.nextInt();
+        }
+
+        System.out.println("Enter frequencies:");
+        for (int i = 0; i < n; i++) {
+            freq[i] = scanner.nextInt();
+        }
+
+        int cost = optimalSearchTree(keys, freq, n);
+        System.out.println("Cost of Optimal BST is " + cost);
+        System.out.println("Root of Optimal BST is " + keys[root[0][n - 1]]);
+        System.out.println("Tree structure:");
+        printTree(keys, 0, n - 1, "", true);
+    }
+}
+---------------------------SUM OF SUBSET-------------------------------
+import java.util.Scanner;
+
+class SumOfSubsets {
+
+    // Returns true if there is a subset of arr[] with sum equal to given sum
+    static boolean isSubsetSum(int[] arr, int sum) {
+        int n = arr.length;
+        boolean[] prev = new boolean[sum + 1];
+        boolean[] curr = new boolean[sum + 1];
+
+        // Mark prev[0] = true as it is true to make sum = 0 using 0 elements
+        prev[0] = true;
+
+        // Fill the subset table in bottom-up manner
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= sum; j++) {
+                if (j < arr[i - 1]) {
+                    curr[j] = prev[j];
+                } else {
+                    curr[j] = prev[j] || prev[j - arr[i - 1]];
+                }
+            }
+
+            // Update prev to be the current row
+            System.arraycopy(curr, 0, prev, 0, sum + 1);
+        }
+        return prev[sum];
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input the size of the array
+        System.out.print("Enter the number of elements in the array: ");
+        int n = sc.nextInt();
+
+        // Input the elements of the array
+        int[] arr = new int[n];
+        System.out.println("Enter the elements of the array:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        // Input the sum to check
+        System.out.print("Enter the sum to check: ");
+        int sum = sc.nextInt();
+
+        // Check if there is a subset with the given sum
+        if (isSubsetSum(arr, sum)) {
+            System.out.println("True");
+        } else {
+            System.out.println("False");
+        }
+
+        sc.close();
+    }
+}
+---------------------------------n-queen-----------------------------------
+import java.util.Scanner;
+
+public class NQueenProblem {
+
+    int N; // Board size
+
+    // Constructor to initialize N from user input
+    public NQueenProblem(int N) {
+        this.N = N;
+    }
+
+    // A utility function to print solution
+    void printSolution(int board[][]) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (board[i][j] == 1)
+                    System.out.print("Q ");
+                else
+                    System.out.print(". ");
+            }
+            System.out.println();
+        }
+    }
+
+    // A utility function to check if a queen can be placed on board[row][col]
+    boolean isSafe(int board[][], int row, int col) {
+        int i, j;
+
+        // Check this row on left side
+        for (i = 0; i < col; i++)
+            if (board[row][i] == 1)
+                return false;
+
+        // Check upper diagonal on left side
+        for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
+            if (board[i][j] == 1)
+                return false;
+
+        // Check lower diagonal on left side
+        for (i = row, j = col; j >= 0 && i < N; i++, j--)
+            if (board[i][j] == 1)
+                return false;
+
+        return true;
+    }
+
+    // A recursive utility function to solve N Queen problem
+    boolean solveNQUtil(int board[][], int col) {
+        if (col >= N)
+            return true;
+
+        for (int i = 0; i < N; i++) {
+            if (isSafe(board, i, col)) {
+                board[i][col] = 1;
+
+                if (solveNQUtil(board, col + 1))
+                    return true;
+
+                board[i][col] = 0; // BACKTRACK
+            }
+        }
+        return false;
+    }
+
+    // This function solves the N Queen problem using Backtracking
+    boolean solveNQ() {
+        int board[][] = new int[N][N];
+
+        if (!solveNQUtil(board, 0)) {
+            System.out.print("Solution does not exist");
+            return false;
+        }
+
+        printSolution(board);
+        return true;
+    }
+
+    public static void main(String args[]) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the value of N: ");
+        int N = scanner.nextInt();
+        scanner.close();
+
+        NQueenProblem Queen = new NQueenProblem(N);
+        Queen.solveNQ();
+    }
+}
+-------------------------------rafi-----------------------------------
